@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=1400">
-    <title>跨境运营灵动仪表盘 v5.2</title>
+    <title>跨境运营灵动仪表盘 v5.2.2</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -60,7 +60,7 @@
         .status-wait { background: #f3f4f6; color: #9ca3af; }
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
 
-        /* FB 广告 (新增名称列) */
+        /* FB 广告 */
         .fb-header { display: grid; grid-template-columns: 80px 1fr 1.5fr 1fr 1fr 1fr 60px; gap: 15px; padding: 10px 20px; background: #f9fafb; border-bottom: 1px solid #e5e7eb; font-size: 12px; font-weight: 700; color: #6b7280; }
         .fb-row { display: grid; grid-template-columns: 80px 1fr 1.5fr 1fr 1fr 1fr 60px; gap: 15px; padding: 15px 20px; border-bottom: 1px solid #f3f4f6; align-items: center; transition: 0.2s; }
         .fb-row:hover { background: #fdfbfc; }
@@ -85,12 +85,120 @@
         .tag { background: #fff; border: 1px solid #e5e7eb; padding: 4px 10px; border-radius: 15px; font-size: 11px; cursor: pointer; display: flex; align-items: center; gap: 5px; color: #4b5563; }
         .tag.active { background: var(--primary); color: white; border-color: var(--primary); }
         .toast { position: fixed; bottom: 30px; right: 30px; background: #1f2937; color: #fff; padding: 12px 24px; border-radius: 8px; display: none; z-index: 9999; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+
+        /* v5.2.2 - 利润弹窗（电脑样式） */
+        .profit-fab {
+            position: fixed;
+            left: 22px;
+            bottom: 22px;
+            width: 84px;
+            height: 84px;
+            border-radius: 18px;
+            background: #111827;
+            border: 1px solid rgba(255,255,255,0.12);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 9998;
+            transition: transform .15s ease;
+        }
+        .profit-fab:hover { transform: translateY(-2px); }
+        .profit-fab .pc {
+            width: 54px; height: 44px; position: relative;
+        }
+        .profit-fab .pc::before{
+            content:"";
+            position:absolute;
+            left:0; top:0;
+            width:54px; height:34px;
+            border-radius: 6px;
+            background: linear-gradient(135deg, #1f2937 0%, #0b1220 100%);
+            border: 1px solid rgba(56,189,248,0.35);
+            box-shadow: inset 0 0 0 2px rgba(79,70,229,0.18);
+        }
+        .profit-fab .pc::after{
+            content:"";
+            position:absolute;
+            left: 11px; top: 36px;
+            width: 32px; height: 8px;
+            border-radius: 0 0 8px 8px;
+            background: #374151;
+            border: 1px solid rgba(255,255,255,0.10);
+        }
+        .profit-fab .dot{
+            position:absolute; left: 24px; top: 14px;
+            width:6px;height:6px;border-radius:999px;background:#38bdf8;
+            box-shadow: 0 0 0 6px rgba(56,189,248,0.12);
+        }
+
+        .modal-mask{
+            position: fixed; inset: 0;
+            background: rgba(15,23,42,0.55);
+            display:none;
+            z-index: 9998;
+        }
+        .modal{
+            position: fixed;
+            left: 50%; top: 50%;
+            transform: translate(-50%, -50%);
+            width: 920px;
+            max-width: calc(100vw - 60px);
+            background: #fff;
+            border-radius: 14px;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.25);
+            display:none;
+            z-index: 9999;
+            overflow: hidden;
+        }
+        .modal-header{
+            padding: 14px 18px;
+            display:flex; align-items:center; justify-content:space-between;
+            background: #fff;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        .modal-title{
+            font-weight: 800;
+            color: var(--text-title);
+            display:flex; align-items:center; gap:10px;
+        }
+        .modal-body{ padding: 18px; background: #fafafa; }
+        .modal-close{
+            border: 1px solid #e5e7eb;
+            background: #fff;
+            border-radius: 8px;
+            width: 34px; height: 34px;
+            cursor:pointer;
+        }
+        .modal-grid{
+            display:grid;
+            grid-template-columns: 1.2fr 1fr 1fr 1fr;
+            gap: 12px;
+        }
+        .modal-grid .box{
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 12px;
+        }
+        .modal-grid .k{ font-size: 12px; font-weight: 800; color: #9ca3af; }
+        .modal-grid .v{ margin-top: 6px; font-size: 16px; font-weight: 800; color: var(--text-title); }
+        .modal-grid .v small{ font-weight: 700; color: #6b7280; }
+        .modal-grid .span-2{ grid-column: span 2; }
+        .modal-grid .span-4{ grid-column: span 4; }
+
+        /* 模板下载按钮 */
+        .template-actions{ display:flex; gap:10px; flex-wrap:wrap; }
+        .btn-secondary{ background:#0f172a; color:#fff; }
+        .btn-secondary:hover{ background:#111c33; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    
+
     <div class="world-clocks" id="clockBar">
         <div class="clock-item"><span class="flag">🇨🇳</span><div class="clock-info"><span class="clock-label">北京时间</span><span class="clock-time" id="time-bj">00:00:00</span></div></div>
         <div class="clock-item"><span class="flag">🇺🇸</span><div class="clock-info"><span class="clock-label">洛杉矶</span><span class="clock-time" id="time-la">00:00:00</span></div></div>
@@ -105,7 +213,7 @@
                 <i class="fa-solid fa-chart-simple"></i>
             </div>
             <div>
-                <h1 style="margin:0; font-size:18px; color: var(--text-title); font-weight: 800;">跨境运营灵动工作台 <span style="font-weight:400; opacity:0.6; font-size:14px;">v5.2</span></h1>
+                <h1 style="margin:0; font-size:18px; color: var(--text-title); font-weight: 800;">跨境运营灵动工作台 <span style="font-weight:400; opacity:0.6; font-size:14px;">v5.2.2</span></h1>
                 <p style="margin:0; font-size:12px; color:var(--text-body);">实时汇率 (USD/CNY): <strong id="rateLabel" style="color:var(--primary)">7.1200</strong></p>
             </div>
         </div>
@@ -145,7 +253,10 @@
         <div class="card-header">
             <div class="card-title"><i class="fa-solid fa-headset"></i> 售后处理中心</div>
             <div style="display: flex; gap: 8px; align-items: center;">
-                <select id="issueSort" onchange="loadIssues()" style="padding:6px; border-radius:4px; border:1px solid #d1d5db;">
+                <div class="template-actions">
+                    <button class="btn btn-ghost btn-mini" onclick="downloadTemplate('after_sales')"><i class="fa-solid fa-download"></i> 售后导入模板</button>
+                </div>
+                <select id="issueSort" onchange="loadIssues()" style="padding:6px; border-radius:4px; border:6px solid #d1d5db;">
                     <option value="date-desc">日期：从新到旧</option>
                     <option value="days-desc">天数：从多到少</option>
                 </select>
@@ -171,7 +282,8 @@
         </div>
     </div>
 
-    <div class="card">
+    <!-- v5.2.2: 利润即时分析改为弹窗 + 左下角电脑按钮（原卡片保留但隐藏，避免破坏原结构/逻辑） -->
+    <div class="card" id="profitCard" style="display:none;">
         <div class="card-header">
             <div class="card-title"><i class="fa-solid fa-calculator"></i> 利润即时分析</div>
             <div style="display: flex; gap: 10px;">
@@ -179,28 +291,16 @@
                 <button class="btn btn-primary" onclick="saveCurrentProduct()">存档记忆</button>
             </div>
         </div>
-        <div class="card-body">
-            <div class="input-group">
-                <div><label class="field-label">商品名称 / SKU</label><input type="text" id="itemName" placeholder="例如：蓝牙耳机-黑色"></div>
-                <div><label class="field-label">竞品售价 ($)</label><input type="number" id="offPrice" step="0.01" oninput="calculate()"></div>
-                <div><label class="field-label">我司售价 ($)</label><input type="number" id="myPrice" step="0.01" oninput="calculate()"></div>
-                <div><label class="field-label">价格竞争力</label><div id="compBadge" style="padding:10px; border-radius:6px; font-weight:700; text-align:center; background:#f3f4f6; font-size:12px;">待输入</div></div>
-            </div>
-            <div class="tag-list" id="tagCloud"></div>
-            <div class="metrics-grid">
-                <div class="metric-item"><label class="field-label">采购成本 (¥)</label><input type="number" id="costCNY" oninput="calculate()" class="metric-input-box" placeholder="0"></div>
-                <div class="metric-item"><label class="field-label">头程运费 (¥)</label><input type="number" id="shipCNY" oninput="calculate()" class="metric-input-box" placeholder="0"></div>
-                <div class="metric-item"><label class="field-label">单品毛利</label><span class="metric-val" id="resProfit" style="color:var(--primary);">$ 0.00</span></div>
-                <div class="metric-item"><label class="field-label">建议售价 (30%利)</label><span class="metric-val" id="resRec" style="color:var(--success);">$ 0.00</span></div>
-                <div class="metric-item"><label class="field-label">净利率</label><span class="metric-val" id="resMargin">0.00%</span></div>
-            </div>
-        </div>
+        <div class="card-body"></div>
     </div>
 
     <div class="card">
         <div class="card-header">
             <div class="card-title"><i class="fa-solid fa-plane-departure"></i> SKU 物流雷达 (到仓提醒)</div>
-            <button class="btn btn-primary btn-mini" onclick="addSKULogix()">+ 新增监控</button>
+            <div class="template-actions">
+                <button class="btn btn-ghost btn-mini" onclick="downloadTemplate('sku_radar')"><i class="fa-solid fa-download"></i> SKU雷达模板</button>
+                <button class="btn btn-primary btn-mini" onclick="addSKULogix()">+ 新增监控</button>
+            </div>
         </div>
         <div class="card-body" style="padding:0">
             <table class="sku-table">
@@ -222,7 +322,10 @@
     <div class="card">
         <div class="card-header">
             <div class="card-title"><i class="fa-brands fa-facebook-f"></i> Facebook 广告表现监控</div>
-            <button class="btn btn-primary btn-mini" onclick="addFBRow()">+ 新增帖子</button>
+            <div class="template-actions">
+                <button class="btn btn-ghost btn-mini" onclick="downloadTemplate('fb_ads')"><i class="fa-solid fa-download"></i> FB广告模板</button>
+                <button class="btn btn-primary btn-mini" onclick="addFBRow()">+ 新增帖子</button>
+            </div>
         </div>
         <div class="card-body" style="padding:0">
             <div class="fb-header">
@@ -241,12 +344,90 @@
 
 <div id="toast" class="toast"></div>
 
+<!-- v5.2.2: 左下角“电脑”按钮 -->
+<div class="profit-fab" onclick="openProfitModal()" title="利润即时分析">
+    <div class="pc"><span class="dot"></span></div>
+</div>
+
+<!-- v5.2.2: 弹窗 -->
+<div id="profitMask" class="modal-mask" onclick="closeProfitModal()"></div>
+<div id="profitModal" class="modal" role="dialog" aria-modal="true" aria-label="利润即时分析">
+    <div class="modal-header">
+        <div class="modal-title"><i class="fa-solid fa-calculator"></i> 利润即时分析</div>
+        <div style="display:flex; gap:10px; align-items:center;">
+            <button class="btn btn-ghost btn-mini" onclick="resetAnalysisInputs()">清空输入</button>
+            <button class="btn btn-primary btn-mini" onclick="saveCurrentProduct()">存档记忆</button>
+            <button class="modal-close" onclick="closeProfitModal()" aria-label="关闭"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+    </div>
+    <div class="modal-body">
+        <div class="input-group" style="margin-bottom: 12px;">
+            <div><label class="field-label">商品名称 / SKU</label><input type="text" id="itemName" placeholder="例如：蓝牙耳机-黑色" oninput="calculate()"></div>
+            <div><label class="field-label">竞品售价 ($)</label><input type="number" id="offPrice" step="0.01" oninput="calculate()"></div>
+            <div><label class="field-label">我司售价 ($)</label><input type="number" id="myPrice" step="0.01" oninput="calculate()"></div>
+            <div><label class="field-label">价格竞争力</label><div id="compBadge" style="padding:10px; border-radius:6px; font-weight:700; text-align:center; background:#f3f4f6; font-size:12px;">待输入</div></div>
+        </div>
+
+        <div class="tag-list" id="tagCloud"></div>
+
+        <div class="modal-grid" style="margin-top: 12px;">
+            <div class="box span-2">
+                <div class="k">采购成本 (¥)</div>
+                <div class="v"><input type="number" id="costCNY" oninput="calculate()" class="metric-input-box" placeholder="0" style="font-size:16px!important;"></div>
+            </div>
+            <div class="box span-2">
+                <div class="k">头程运费 (¥)</div>
+                <div class="v"><input type="number" id="shipCNY" oninput="calculate()" class="metric-input-box" placeholder="0" style="font-size:16px!important;"></div>
+            </div>
+
+            <div class="box">
+                <div class="k">总成本（$）</div>
+                <div class="v" id="resTotalCost">$ 0.00</div>
+            </div>
+            <div class="box">
+                <div class="k">单品毛利（￥/$）</div>
+                <div class="v" id="resProfitDual">¥ 0.00 / $ 0.00</div>
+            </div>
+            <div class="box">
+                <div class="k">净利率</div>
+                <div class="v" id="resMargin">0.00%</div>
+            </div>
+            <div class="box">
+                <div class="k">建议售价 (30%利)</div>
+                <div class="v" id="resRec">$ 0.00</div>
+            </div>
+
+            <div class="box span-4">
+                <div class="k">快速结果</div>
+                <div class="v" style="display:flex; gap:18px; flex-wrap:wrap;">
+                    <span><small style="color:#6b7280;font-weight:800;">商品名称 / SKU：</small><span id="resName" style="font-weight:900;">--</span></span>
+                    <span><small style="color:#6b7280;font-weight:800;">竞品售价 ($)：</small><span id="resOff">$ 0.00</span></span>
+                    <span><small style="color:#6b7280;font-weight:800;">我司售价 ($)：</small><span id="resMy">$ 0.00</span></span>
+                    <span><small style="color:#6b7280;font-weight:800;">价格竞争力：</small><span id="resComp">--</span></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     let globalRate = 7.12;
+
+    // v5.2.2: 统一记忆存储层（跨版本迁移）
+    const STORE = {
+        ver: '5.2.2',
+        tasks: 'lm_mem_tasks',          // {todo:[],schedule:[],daily:[], last_reset:''}
+        issues: 'lm_mem_issues',        // []
+        sku: 'lm_mem_sku',              // []
+        fb: 'lm_mem_fb',                // []
+        profitList: 'lm_mem_profit_list', // []
+        profitPrefix: 'lm_mem_profit_'  // + name
+    };
 
     window.onload = () => {
         startClocks();
         fetchRate();
+        migrateMemory();
         loadHistory();
         loadIssues();
         loadWorkTasks();
@@ -255,17 +436,61 @@
         checkDailyReset();
     };
 
-    // --- 导出 Excel 功能 (新增) ---
+    // ------------------ v5.2.2 新增：模板下载（CSV，Excel可直接打开） ------------------
+    function downloadTemplate(type){
+        const bom = "\uFEFF";
+        let name = "模板";
+        let csv = "";
+
+        if(type === 'fb_ads'){
+            name = "Facebook广告表现监控_导入模板";
+            csv = [
+                "广告名称,帖子编码,心情数,评论数,点赞数,预览图(base64可留空)",
+                "示例广告A,POST-001,12,3,28,",
+                "示例广告B,POST-002,5,1,9,"
+            ].join("\n");
+        } else if(type === 'sku_radar'){
+            name = "SKU物流雷达_导入模板";
+            csv = [
+                "SKU 名称,发货日期(YYYY-MM-DD),预计时效(天)",
+                "SKU-示例A,2026-01-15,15",
+                "SKU-示例B,2026-01-20,20"
+            ].join("\n");
+        } else if(type === 'profit'){
+            name = "利润即时分析_导入模板";
+            csv = [
+                "商品名称 / SKU,竞品售价 ($),我司售价 ($),采购成本 (¥),头程运费 (¥)",
+                "蓝牙耳机-黑色,29.99,27.99,38,12"
+            ].join("\n");
+        } else if(type === 'after_sales'){
+            name = "售后处理中心_导入模板";
+            csv = [
+                "登记日期(YYYY-MM-DD),订单编号,异常详情,进度动作,状态(pending/solved)",
+                "2026-02-01,ORDER-001,包裹未到,已联系承运商,pending"
+            ].join("\n");
+        } else {
+            return;
+        }
+
+        const blob = new Blob([bom + csv], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.setAttribute("href", url);
+        link.setAttribute("download", `${name}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        showToast("模板已下载（CSV）");
+    }
+
+    // ------------------ 导出：保留原按钮行为（售后CSV） ------------------
     function exportToExcel() {
-        // 构建 CSV 内容 (BOM头解决中文乱码)
         let csvContent = "\uFEFF";
-        // 表头
         csvContent += "登记日期,已过天数,订单编号,异常详情,进度动作,状态\n";
-        
-        let data = JSON.parse(localStorage.getItem('issue_db_v4') || '[]');
+
+        let data = JSON.parse(localStorage.getItem(STORE.issues) || '[]');
         data.forEach(row => {
             const days = getDaysElapsed(row.date);
-            // 处理内容中的逗号和换行符，防止破坏 CSV 格式
             const clean = (text) => `"${(text || '').replace(/"/g, '""')}"`;
             csvContent += `${clean(row.date)},${days},${clean(row.order)},${clean(row.issue)},${clean(row.process)},${clean(row.status === 'solved' ? '已结案' : '处理中')}\n`;
         });
@@ -281,7 +506,60 @@
         showToast("Excel (CSV) 文件已下载");
     }
 
-    // --- 其他原有逻辑 ---
+    // ------------------ v5.2.2：跨版本迁移（确保版本迭代仍记住旧内容） ------------------
+    function migrateMemory(){
+        // 1) tasks：从旧 work_* 迁移
+        const curTasks = JSON.parse(localStorage.getItem(STORE.tasks) || 'null');
+        if(!curTasks){
+            const todo = JSON.parse(localStorage.getItem('work_todo') || '[]');
+            const schedule = JSON.parse(localStorage.getItem('work_schedule') || '[]');
+            const daily = JSON.parse(localStorage.getItem('work_daily') || '[]');
+            localStorage.setItem(STORE.tasks, JSON.stringify({todo, schedule, daily, last_reset: localStorage.getItem('last_reset') || ''}));
+        }
+
+        // 2) issues：从 issue_db_v4 迁移（并修复导入/存储不全的问题：统一字段）
+        const curIssues = localStorage.getItem(STORE.issues);
+        if(!curIssues){
+            const old = JSON.parse(localStorage.getItem('issue_db_v4') || '[]');
+            const fixed = old.map(r => ({
+                date: r.date || new Date().toISOString().split('T')[0],
+                order: r.order || '',
+                issue: r.issue || '',
+                process: r.process || '',
+                status: r.status === 'solved' ? 'solved' : 'pending'
+            }));
+            localStorage.setItem(STORE.issues, JSON.stringify(fixed));
+        }
+
+        // 3) sku：从 sku_radar 迁移
+        const curSku = localStorage.getItem(STORE.sku);
+        if(!curSku){
+            const old = JSON.parse(localStorage.getItem('sku_radar') || '[]');
+            localStorage.setItem(STORE.sku, JSON.stringify(old));
+        }
+
+        // 4) fb：从 fb_ads_v52 迁移
+        const curFb = localStorage.getItem(STORE.fb);
+        if(!curFb){
+            const old = JSON.parse(localStorage.getItem('fb_ads_v52') || '[]');
+            localStorage.setItem(STORE.fb, JSON.stringify(old));
+        }
+
+        // 5) profit：从 p_v51_* 迁移（列表+明细）
+        const curProfitList = localStorage.getItem(STORE.profitList);
+        if(!curProfitList){
+            const oldList = JSON.parse(localStorage.getItem('p_v51_list') || '[]');
+            localStorage.setItem(STORE.profitList, JSON.stringify(oldList));
+            oldList.forEach(n => {
+                const d = JSON.parse(localStorage.getItem('p_v51_' + n) || 'null');
+                if(d && !localStorage.getItem(STORE.profitPrefix + n)){
+                    localStorage.setItem(STORE.profitPrefix + n, JSON.stringify(d));
+                }
+            });
+        }
+    }
+
+    // ------------------ 时钟 / 汇率 ------------------
     function startClocks() {
         const update = () => {
             const zones = [{id:'bj',z:'Asia/Shanghai'},{id:'la',z:'America/Los_Angeles'},{id:'uk',z:'Europe/London'},{id:'cz',z:'Europe/Prague'},{id:'au',z:'Australia/Sydney'}];
@@ -297,59 +575,104 @@
         try {
             const res = await fetch('https://open.er-api.com/v6/latest/USD');
             const data = await res.json();
-            if(data?.rates?.CNY) { globalRate = data.rates.CNY; document.getElementById('rateLabel').innerText = globalRate.toFixed(4); calculate(); }
+            if(data?.rates?.CNY) {
+                globalRate = data.rates.CNY;
+                document.getElementById('rateLabel').innerText = globalRate.toFixed(4);
+                calculate();
+            }
         } catch(e) {}
     }
 
-    function calculate() {
-        const off = parseFloat(document.getElementById('offPrice').value) || 0;
-        const my = parseFloat(document.getElementById('myPrice').value) || 0;
-        const cost = parseFloat(document.getElementById('costCNY').value) || 0;
-        const ship = parseFloat(document.getElementById('shipCNY').value) || 0;
-        
-        const badge = document.getElementById('compBadge');
-        if(off && my) {
-            if(my < off) { badge.innerHTML = "价格优势"; badge.style.color = "#fff"; badge.style.background = "var(--success)"; }
-            else if(my == off) { badge.innerHTML = "价格持平"; badge.style.color = "#fff"; badge.style.background = "var(--warning)"; }
-            else { badge.innerHTML = "价格劣势"; badge.style.color = "#fff"; badge.style.background = "var(--danger)"; }
-        }
-
-        const totalPaid = my + (my > 0 && my < 35 ? 10 : 0);
-        const totalCostUSD = (cost + ship) / globalRate + (totalPaid * 0.04);
-        const profit = totalPaid - totalCostUSD;
-        const margin = totalPaid > 0 ? (profit / totalPaid) * 100 : 0;
-        const rec = ((cost + ship) / globalRate) / 0.66;
-
-        document.getElementById('resProfit').innerText = `$ ${my > 0 ? profit.toFixed(2) : "0.00"}`;
-        document.getElementById('resMargin').innerText = margin.toFixed(2) + "%";
-        document.getElementById('resMargin').style.color = margin >= 30 ? "var(--success)" : "var(--danger)";
-        document.getElementById('resRec').innerText = `$ ${my > 0 ? rec.toFixed(2) : "0.00"}`;
+    // ------------------ v5.2.2：利润弹窗控制 ------------------
+    function openProfitModal(){
+        document.getElementById('profitMask').style.display = 'block';
+        document.getElementById('profitModal').style.display = 'block';
+        calculate();
+    }
+    function closeProfitModal(){
+        document.getElementById('profitMask').style.display = 'none';
+        document.getElementById('profitModal').style.display = 'none';
     }
 
-    // --- SKU 物流雷达 (修复状态逻辑) ---
+    // ------------------ v5.2.2：利润计算（补充总成本/双币毛利/弹窗字段） ------------------
+    function calculate() {
+        const name = (document.getElementById('itemName')?.value || '').trim();
+        const off = parseFloat(document.getElementById('offPrice')?.value) || 0;
+        const my = parseFloat(document.getElementById('myPrice')?.value) || 0;
+        const cost = parseFloat(document.getElementById('costCNY')?.value) || 0;
+        const ship = parseFloat(document.getElementById('shipCNY')?.value) || 0;
+
+        const badge = document.getElementById('compBadge');
+        let compText = '--';
+        if(badge){
+            if(off && my) {
+                if(my < off) { compText = "价格优势"; badge.innerHTML = compText; badge.style.color = "#fff"; badge.style.background = "var(--success)"; }
+                else if(my == off) { compText = "价格持平"; badge.innerHTML = compText; badge.style.color = "#fff"; badge.style.background = "var(--warning)"; }
+                else { compText = "价格劣势"; badge.innerHTML = compText; badge.style.color = "#fff"; badge.style.background = "var(--danger)"; }
+            } else {
+                badge.innerHTML = "待输入"; badge.style.color = "#111827"; badge.style.background = "#f3f4f6";
+            }
+        }
+
+        // 原逻辑：订单额外费用 / 手续费
+        const totalPaid = my + (my > 0 && my < 35 ? 10 : 0);
+        const totalCostUSD = (cost + ship) / globalRate + (totalPaid * 0.04);
+        const profitUSD = totalPaid - totalCostUSD;
+        const margin = totalPaid > 0 ? (profitUSD / totalPaid) * 100 : 0;
+        const rec = ((cost + ship) / globalRate) / 0.66;
+
+        // 输出到弹窗
+        const resTotalCost = document.getElementById('resTotalCost');
+        const resProfitDual = document.getElementById('resProfitDual');
+        const resMargin = document.getElementById('resMargin');
+        const resRec = document.getElementById('resRec');
+
+        if(resTotalCost) resTotalCost.innerText = `$ ${my > 0 ? totalCostUSD.toFixed(2) : "0.00"}`;
+
+        // 双币毛利：¥ / $
+        const profitCNY = profitUSD * globalRate;
+        if(resProfitDual) resProfitDual.innerText = `¥ ${my > 0 ? profitCNY.toFixed(2) : "0.00"} / $ ${my > 0 ? profitUSD.toFixed(2) : "0.00"}`;
+
+        if(resMargin){
+            resMargin.innerText = margin.toFixed(2) + "%";
+            resMargin.style.color = margin >= 30 ? "var(--success)" : "var(--danger)";
+        }
+        if(resRec) resRec.innerText = `$ ${my > 0 ? rec.toFixed(2) : "0.00"}`;
+
+        // 快速结果区
+        const resName = document.getElementById('resName');
+        const resOff = document.getElementById('resOff');
+        const resMy = document.getElementById('resMy');
+        const resComp = document.getElementById('resComp');
+        if(resName) resName.innerText = name || '--';
+        if(resOff) resOff.innerText = `$ ${off ? off.toFixed(2) : "0.00"}`;
+        if(resMy) resMy.innerText = `$ ${my ? my.toFixed(2) : "0.00"}`;
+        if(resComp) resComp.innerText = compText;
+    }
+
+    // ------------------ SKU 物流雷达（使用统一记忆键） ------------------
     function loadSKULogix() {
-        const list = JSON.parse(localStorage.getItem('sku_radar') || '[]');
+        const list = JSON.parse(localStorage.getItem(STORE.sku) || '[]');
         const container = document.getElementById('skuBody');
         container.innerHTML = '';
         list.forEach((item, index) => {
-            const arrDate = new Date(new Date(item.shipDate).getTime() + item.duration * 86400000);
+            const arrDate = item.shipDate ? new Date(new Date(item.shipDate).getTime() + (parseInt(item.duration||0) * 86400000)) : null;
             const today = new Date(); today.setHours(0,0,0,0);
-            const isLate = today > arrDate;
-            
-            // 状态逻辑判断
+            const isLate = arrDate ? (today > arrDate) : false;
+
             let statusHtml = '<span class="status-tag status-wait">待填写</span>';
             if(item.name && item.shipDate) {
-                statusHtml = isLate 
-                    ? '<span class="status-tag status-late">⚠ 已逾期</span>' 
+                statusHtml = isLate
+                    ? '<span class="status-tag status-late">⚠ 已逾期</span>'
                     : '<span class="status-tag status-ok">🟢 运输中</span>';
             }
 
             const tr = document.createElement('tr');
             tr.innerHTML = `
-                <td><input type="text" value="${item.name}" oninput="upSKU(${index},'name',this.value)"></td>
-                <td><input type="date" value="${item.shipDate}" onchange="upSKU(${index},'shipDate',this.value)"></td>
-                <td><input type="number" value="${item.duration}" oninput="upSKU(${index},'duration',this.value)"></td>
-                <td style="font-weight:700">${item.shipDate ? arrDate.toLocaleDateString() : '--'}</td>
+                <td><input type="text" value="${escapeHtml(item.name||'')}" oninput="upSKU(${index},'name',this.value)"></td>
+                <td><input type="date" value="${escapeAttr(item.shipDate||'')}" onchange="upSKU(${index},'shipDate',this.value)"></td>
+                <td><input type="number" value="${escapeAttr(item.duration||15)}" oninput="upSKU(${index},'duration',this.value)"></td>
+                <td style="font-weight:700">${arrDate ? arrDate.toLocaleDateString() : '--'}</td>
                 <td>${statusHtml}</td>
                 <td><button class="btn-ghost" style="color:var(--danger);padding:4px;" onclick="delSKU(${index})"><i class="fa-solid fa-trash"></i></button></td>
             `;
@@ -357,16 +680,16 @@
         });
     }
     function addSKULogix() {
-        let list = JSON.parse(localStorage.getItem('sku_radar')||'[]');
+        let list = JSON.parse(localStorage.getItem(STORE.sku)||'[]');
         list.push({name:'', shipDate:'', duration:15});
-        localStorage.setItem('sku_radar',JSON.stringify(list)); loadSKULogix();
+        localStorage.setItem(STORE.sku,JSON.stringify(list)); loadSKULogix();
     }
-    function upSKU(i,f,v) { let l=JSON.parse(localStorage.getItem('sku_radar')); l[i][f]=v; localStorage.setItem('sku_radar',JSON.stringify(l)); loadSKULogix(); }
-    function delSKU(i) { let l=JSON.parse(localStorage.getItem('sku_radar')); l.splice(i,1); localStorage.setItem('sku_radar',JSON.stringify(l)); loadSKULogix(); }
+    function upSKU(i,f,v) { let l=JSON.parse(localStorage.getItem(STORE.sku)); l[i][f]=v; localStorage.setItem(STORE.sku,JSON.stringify(l)); loadSKULogix(); }
+    function delSKU(i) { let l=JSON.parse(localStorage.getItem(STORE.sku)); l.splice(i,1); localStorage.setItem(STORE.sku,JSON.stringify(l)); loadSKULogix(); }
 
-    // --- FB 广告 (新增名称) ---
+    // ------------------ FB 广告（使用统一记忆键） ------------------
     function loadFBTable() {
-        const list = JSON.parse(localStorage.getItem('fb_ads_v52') || '[]');
+        const list = JSON.parse(localStorage.getItem(STORE.fb) || '[]');
         const container = document.getElementById('fbContainer');
         container.innerHTML = '';
         list.forEach((item, index) => {
@@ -377,80 +700,80 @@
                     <img src="${item.img || ''}">
                     <input type="file" id="fbFile${index}" style="display:none" onchange="handleFBImg(${index}, event)">
                 </div>
-                <input type="text" value="${item.adName || ''}" placeholder="广告名称" oninput="upFB(${index},'adName',this.value)">
-                <input type="text" value="${item.code}" placeholder="编码" oninput="upFB(${index},'code',this.value)">
-                <input type="number" value="${item.heart}" oninput="upFB(${index},'heart',this.value)">
-                <input type="number" value="${item.comm}" oninput="upFB(${index},'comm',this.value)">
-                <input type="number" value="${item.like}" oninput="upFB(${index},'like',this.value)">
+                <input type="text" value="${escapeAttr(item.adName || '')}" placeholder="广告名称" oninput="upFB(${index},'adName',this.value)">
+                <input type="text" value="${escapeAttr(item.code || '')}" placeholder="编码" oninput="upFB(${index},'code',this.value)">
+                <input type="number" value="${escapeAttr(item.heart ?? 0)}" oninput="upFB(${index},'heart',this.value)">
+                <input type="number" value="${escapeAttr(item.comm ?? 0)}" oninput="upFB(${index},'comm',this.value)">
+                <input type="number" value="${escapeAttr(item.like ?? 0)}" oninput="upFB(${index},'like',this.value)">
                 <button class="btn-ghost" onclick="delFB(${index})"><i class="fa-solid fa-trash"></i></button>
             `;
             container.appendChild(div);
         });
     }
-    function addFBRow() { let l=JSON.parse(localStorage.getItem('fb_ads_v52')||'[]'); l.push({img:'', adName:'', code:'', heart:0, comm:0, like:0}); localStorage.setItem('fb_ads_v52',JSON.stringify(l)); loadFBTable(); }
-    function upFB(i,f,v) { let l=JSON.parse(localStorage.getItem('fb_ads_v52')); l[i][f]=v; localStorage.setItem('fb_ads_v52',JSON.stringify(l)); }
-    function delFB(i) { let l=JSON.parse(localStorage.getItem('fb_ads_v52')); l.splice(i,1); localStorage.setItem('fb_ads_v52',JSON.stringify(l)); loadFBTable(); }
+    function addFBRow() { let l=JSON.parse(localStorage.getItem(STORE.fb)||'[]'); l.push({img:'', adName:'', code:'', heart:0, comm:0, like:0}); localStorage.setItem(STORE.fb,JSON.stringify(l)); loadFBTable(); }
+    function upFB(i,f,v) { let l=JSON.parse(localStorage.getItem(STORE.fb)); l[i][f]=v; localStorage.setItem(STORE.fb,JSON.stringify(l)); }
+    function delFB(i) { let l=JSON.parse(localStorage.getItem(STORE.fb)); l.splice(i,1); localStorage.setItem(STORE.fb,JSON.stringify(l)); loadFBTable(); }
     function handleFBImg(i,ev) { const f=ev.target.files[0]; const r=new FileReader(); r.onload=e=>{upFB(i,'img',e.target.result);loadFBTable()}; r.readAsDataURL(f); }
 
-    // --- 任务逻辑 ---
+    // ------------------ 任务逻辑（使用统一记忆键；版本更新不丢） ------------------
     function checkDailyReset() {
         const today = new Date().toLocaleDateString();
-        if (localStorage.getItem('last_reset') !== today) {
-            let l = JSON.parse(localStorage.getItem('work_daily')||'[]');
-            l.forEach(i => i.done = false);
-            localStorage.setItem('work_daily', JSON.stringify(l));
-            localStorage.setItem('last_reset', today);
+        const state = JSON.parse(localStorage.getItem(STORE.tasks) || '{"todo":[],"schedule":[],"daily":[],"last_reset":""}');
+        if (state.last_reset !== today) {
+            state.daily = (state.daily || []).map(i => ({...i, done:false}));
+            state.last_reset = today;
+            localStorage.setItem(STORE.tasks, JSON.stringify(state));
         }
     }
+
     function loadWorkTasks() {
+        const state = JSON.parse(localStorage.getItem(STORE.tasks) || '{"todo":[],"schedule":[],"daily":[]}');
         ['todo', 'schedule', 'daily'].forEach(type => {
-            const list = JSON.parse(localStorage.getItem(`work_${type}`) || '[]');
+            const list = state[type] || [];
             const el = document.getElementById(`${type}List`);
             el.innerHTML = '';
             list.forEach((item, index) => {
                 const div = document.createElement('div');
                 div.className = `task-item ${item.done ? 'done' : ''}`;
-                div.innerHTML = `<input type="checkbox" ${item.done ? 'checked' : ''} onchange="togTask('${type}',${index})"><span contenteditable="true" onblur="editTask('${type}',${index},this)">${item.text}</span><i class="fa-solid fa-xmark" style="margin-left:auto;cursor:pointer;opacity:0.3" onclick="delTask('${type}',${index})"></i>`;
+                div.innerHTML = `<input type="checkbox" ${item.done ? 'checked' : ''} onchange="togTask('${type}',${index})"><span contenteditable="true" onblur="editTask('${type}',${index},this)">${escapeHtml(item.text||'')}</span><i class="fa-solid fa-xmark" style="margin-left:auto;cursor:pointer;opacity:0.3" onclick="delTask('${type}',${index})"></i>`;
                 el.appendChild(div);
             });
         });
     }
-    function addTask(t) { let l=JSON.parse(localStorage.getItem(`work_${t}`)||'[]'); l.push({text:'新事项',done:false}); localStorage.setItem(`work_${t}`,JSON.stringify(l)); loadWorkTasks(); }
-    function togTask(t,i) { let l=JSON.parse(localStorage.getItem(`work_${t}`)); l[i].done=!l[i].done; localStorage.setItem(`work_${t}`,JSON.stringify(l)); loadWorkTasks(); }
-    function editTask(t,i,el) { let l=JSON.parse(localStorage.getItem(`work_${t}`)); l[i].text=el.innerText; localStorage.setItem(`work_${t}`,JSON.stringify(l)); }
-    function delTask(t,i) { let l=JSON.parse(localStorage.getItem(`work_${t}`)); l.splice(i,1); localStorage.setItem(`work_${t}`,JSON.stringify(l)); loadWorkTasks(); }
+    function addTask(t) {
+        const state = JSON.parse(localStorage.getItem(STORE.tasks) || '{"todo":[],"schedule":[],"daily":[]}');
+        state[t] = state[t] || [];
+        state[t].push({text:'新事项',done:false});
+        localStorage.setItem(STORE.tasks, JSON.stringify(state));
+        loadWorkTasks();
+    }
+    function togTask(t,i) {
+        const state = JSON.parse(localStorage.getItem(STORE.tasks));
+        state[t][i].done = !state[t][i].done;
+        localStorage.setItem(STORE.tasks, JSON.stringify(state));
+        loadWorkTasks();
+    }
+    function editTask(t,i,el) {
+        const state = JSON.parse(localStorage.getItem(STORE.tasks));
+        state[t][i].text = el.innerText;
+        localStorage.setItem(STORE.tasks, JSON.stringify(state));
+    }
+    function delTask(t,i) {
+        const state = JSON.parse(localStorage.getItem(STORE.tasks));
+        state[t].splice(i,1);
+        localStorage.setItem(STORE.tasks, JSON.stringify(state));
+        loadWorkTasks();
+    }
 
-    // --- 售后 & 通用 ---
-    function saveCurrentProduct() {
-        const n = document.getElementById('itemName').value.trim();
-        if(!n) return showToast("请输入商品名");
-        const d = { off: document.getElementById('offPrice').value, my: document.getElementById('myPrice').value, cost: document.getElementById('costCNY').value, ship: document.getElementById('shipCNY').value };
-        localStorage.setItem('p_v51_' + n, JSON.stringify(d));
-        let l = JSON.parse(localStorage.getItem('p_v51_list') || '[]');
-        if(!l.includes(n)) { l.unshift(n); localStorage.setItem('p_v51_list', JSON.stringify(l)); }
-        loadHistory(); showToast("已存档");
-    }
-    function loadHistory() {
-        const c = document.getElementById('tagCloud');
-        const l = JSON.parse(localStorage.getItem('p_v51_list') || '[]');
-        c.innerHTML = l.length ? '' : '<span style="font-size:12px;color:#ccc">暂无存档</span>';
-        l.forEach(n => {
-            const t = document.createElement('div'); t.className = 'tag'; t.innerHTML = `<span>${n}</span><i class="fa-solid fa-xmark" onclick="delHist('${n}',event)" style="font-size:10px;opacity:0.5"></i>`;
-            t.onclick = () => {
-                const d = JSON.parse(localStorage.getItem('p_v51_' + n));
-                if(d) { document.getElementById('itemName').value=n; document.getElementById('offPrice').value=d.off; document.getElementById('myPrice').value=d.my; document.getElementById('costCNY').value=d.cost; document.getElementById('shipCNY').value=d.ship; calculate(); }
-            }; c.appendChild(t);
-        });
-    }
-    function delHist(n,e) { e.stopPropagation(); let l = JSON.parse(localStorage.getItem('p_v51_list')).filter(i => i !== n); localStorage.setItem('p_v51_list', JSON.stringify(l)); localStorage.removeItem('p_v51_' + n); loadHistory(); }
-    
+    // ------------------ 售后：修复“Excel导入数据不全”根因（persist 读取更稳） ------------------
     function addIssueRow() {
-        let d = JSON.parse(localStorage.getItem('issue_db_v4')||'[]');
+        let d = JSON.parse(localStorage.getItem(STORE.issues)||'[]');
         d.unshift({ date: new Date().toISOString().split('T')[0], order: '', issue: '', process: '', status: 'pending' });
-        localStorage.setItem('issue_db_v4', JSON.stringify(d)); loadIssues();
+        localStorage.setItem(STORE.issues, JSON.stringify(d)); loadIssues();
     }
+
     function loadIssues() {
-        let d = JSON.parse(localStorage.getItem('issue_db_v4')||'[]');
+        let d = JSON.parse(localStorage.getItem(STORE.issues)||'[]');
         const sort = document.getElementById('issueSort').value;
         d.sort((a,b) => sort==='days-desc' ? new Date(a.date)-new Date(b.date) : new Date(b.date)-new Date(a.date));
         const body = document.getElementById('issueBody'); body.innerHTML='';
@@ -458,31 +781,140 @@
             const tr = document.createElement('tr');
             const days = getDaysElapsed(i.date);
             tr.innerHTML = `
-                <td style="padding-left:20px"><input type="date" value="${i.date}" onchange="persistIssues()"></td>
+                <td style="padding-left:20px"><input type="date" value="${escapeAttr(i.date)}" onchange="persistIssues()"></td>
                 <td style="text-align:center;font-weight:bold;color:${days>3?'var(--danger)':'var(--warning)'}">${days}天</td>
-                <td><input type="text" value="${i.order}" placeholder="订单号" oninput="persistIssues()"></td>
-                <td><textarea class="textarea-pro" oninput="persistIssues()">${i.issue}</textarea></td>
-                <td><textarea class="textarea-pro" oninput="persistIssues()">${i.process}</textarea></td>
-                <td><select onchange="persistIssues()"><option value="pending" ${i.status==='pending'?'selected':''}>处理中</option><option value="solved" ${i.status==='solved'?'selected':''}>已结案</option></select></td>
+                <td><input type="text" value="${escapeAttr(i.order||'')}" placeholder="订单号" oninput="persistIssues()"></td>
+                <td><textarea class="textarea-pro" oninput="persistIssues()">${escapeHtml(i.issue||'')}</textarea></td>
+                <td><textarea class="textarea-pro" oninput="persistIssues()">${escapeHtml(i.process||'')}</textarea></td>
+                <td>
+                    <select onchange="persistIssues()">
+                        <option value="pending" ${i.status==='pending'?'selected':''}>处理中</option>
+                        <option value="solved" ${i.status==='solved'?'selected':''}>已结案</option>
+                    </select>
+                </td>
                 <td style="text-align:center"><button class="btn-ghost" onclick="this.closest('tr').remove();persistIssues()"><i class="fa-solid fa-trash"></i></button></td>
             `;
             body.appendChild(tr);
         });
     }
-    function persistIssues() {
-        const rows = Array.from(document.querySelectorAll('#issueBody tr')).map(r => ({
-            date: r.querySelector('input[type="date"]').value, order: r.querySelector('input[type="text"]').value,
-            issue: r.querySelectorAll('textarea')[0].value, process: r.querySelectorAll('textarea')[1].value, status: r.querySelector('select').value
-        }));
-        localStorage.setItem('issue_db_v4', JSON.stringify(rows));
-    }
-    function filterIssues() { const k = document.getElementById('issueSearch').value.toLowerCase(); document.querySelectorAll('#issueBody tr').forEach(r => r.style.display = r.innerText.toLowerCase().includes(k) ? '' : 'none'); }
-    function getDaysElapsed(d) { const s=new Date(d), n=new Date(); return Math.floor((Date.UTC(n.getFullYear(), n.getMonth(), n.getDate()) - Date.UTC(s.getFullYear(), s.getMonth(), s.getDate()))/(1000*60*60*24)); }
 
-    function resetAnalysisInputs() { ['itemName','offPrice','myPrice','costCNY','shipCNY'].forEach(i=>document.getElementById(i).value=''); calculate(); }
-    function importData(ev) { const f=ev.target.files[0]; const r=new FileReader(); r.onload=e=>{ const d=JSON.parse(e.target.result); Object.keys(d).forEach(k=>localStorage.setItem(k,d[k])); location.reload(); }; r.readAsText(f); }
-    function clearEverything() { if(confirm("确定清空？")) { localStorage.clear(); location.reload(); } }
-    function showToast(m) { const t=document.getElementById('toast'); t.innerText=m; t.style.display='block'; setTimeout(()=>t.style.display='none',2000); }
+    // 修复点：DOM 选择更严格 + 字段兜底，避免“导入后为空/缺列导致存储不全”
+    function persistIssues() {
+        const rows = Array.from(document.querySelectorAll('#issueBody tr')).map(r => {
+            const dateEl = r.querySelector('input[type="date"]');
+            const orderEl = r.querySelector('input[type="text"]');
+            const textareas = r.querySelectorAll('textarea');
+            const sel = r.querySelector('select');
+
+            return {
+                date: (dateEl && dateEl.value) ? dateEl.value : new Date().toISOString().split('T')[0],
+                order: (orderEl && orderEl.value) ? orderEl.value : '',
+                issue: (textareas[0] && textareas[0].value) ? textareas[0].value : '',
+                process: (textareas[1] && textareas[1].value) ? textareas[1].value : '',
+                status: (sel && sel.value) ? sel.value : 'pending'
+            };
+        });
+        localStorage.setItem(STORE.issues, JSON.stringify(rows));
+    }
+
+    function filterIssues() {
+        const k = document.getElementById('issueSearch').value.toLowerCase();
+        document.querySelectorAll('#issueBody tr').forEach(r => r.style.display = r.innerText.toLowerCase().includes(k) ? '' : 'none');
+    }
+    function getDaysElapsed(d) {
+        const s=new Date(d), n=new Date();
+        return Math.floor((Date.UTC(n.getFullYear(), n.getMonth(), n.getDate()) - Date.UTC(s.getFullYear(), s.getMonth(), s.getDate()))/(1000*60*60*24));
+    }
+
+    // ------------------ 利润存档记忆（使用统一记忆键；版本更新不丢） ------------------
+    function saveCurrentProduct() {
+        const n = (document.getElementById('itemName').value || '').trim();
+        if(!n) return showToast("请输入商品名");
+
+        const d = {
+            off: document.getElementById('offPrice').value,
+            my: document.getElementById('myPrice').value,
+            cost: document.getElementById('costCNY').value,
+            ship: document.getElementById('shipCNY').value
+        };
+        localStorage.setItem(STORE.profitPrefix + n, JSON.stringify(d));
+
+        let l = JSON.parse(localStorage.getItem(STORE.profitList) || '[]');
+        if(!l.includes(n)) { l.unshift(n); localStorage.setItem(STORE.profitList, JSON.stringify(l)); }
+        loadHistory();
+        showToast("已存档");
+    }
+
+    function loadHistory() {
+        const c = document.getElementById('tagCloud');
+        const l = JSON.parse(localStorage.getItem(STORE.profitList) || '[]');
+        c.innerHTML = l.length ? '' : '<span style="font-size:12px;color:#ccc">暂无存档</span>';
+        l.forEach(n => {
+            const t = document.createElement('div');
+            t.className = 'tag';
+            t.innerHTML = `<span>${escapeHtml(n)}</span><i class="fa-solid fa-xmark" onclick="delHist('${escapeJs(n)}',event)" style="font-size:10px;opacity:0.5"></i>`;
+            t.onclick = () => {
+                const d = JSON.parse(localStorage.getItem(STORE.profitPrefix + n) || 'null');
+                if(d) {
+                    document.getElementById('itemName').value=n;
+                    document.getElementById('offPrice').value=d.off;
+                    document.getElementById('myPrice').value=d.my;
+                    document.getElementById('costCNY').value=d.cost;
+                    document.getElementById('shipCNY').value=d.ship;
+                    calculate();
+                    openProfitModal();
+                }
+            };
+            c.appendChild(t);
+        });
+    }
+
+    function delHist(n,e) {
+        e.stopPropagation();
+        let l = JSON.parse(localStorage.getItem(STORE.profitList) || '[]').filter(i => i !== n);
+        localStorage.setItem(STORE.profitList, JSON.stringify(l));
+        localStorage.removeItem(STORE.profitPrefix + n);
+        loadHistory();
+    }
+
+    function resetAnalysisInputs() {
+        ['itemName','offPrice','myPrice','costCNY','shipCNY'].forEach(i=>{ const el=document.getElementById(i); if(el) el.value=''; });
+        calculate();
+    }
+
+    // ------------------ 备份/恢复/清空（保留原有逻辑） ------------------
+    function importData(ev) {
+        const f=ev.target.files[0];
+        const r=new FileReader();
+        r.onload=e=>{
+            const d=JSON.parse(e.target.result);
+            Object.keys(d).forEach(k=>localStorage.setItem(k,d[k]));
+            location.reload();
+        };
+        r.readAsText(f);
+    }
+
+    function clearEverything() {
+        if(confirm("确定清空？")) { localStorage.clear(); location.reload(); }
+    }
+
+    function showToast(m) {
+        const t=document.getElementById('toast');
+        t.innerText=m;
+        t.style.display='block';
+        setTimeout(()=>t.style.display='none',2000);
+    }
+
+    // ------------------ 安全转义小工具 ------------------
+    function escapeHtml(s){
+        return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+    }
+    function escapeAttr(s){
+        return String(s).replace(/"/g,'&quot;');
+    }
+    function escapeJs(s){
+        return String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+    }
 </script>
 </body>
 </html>
